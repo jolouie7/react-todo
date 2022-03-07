@@ -13,26 +13,33 @@ const AddTodoForm = ({ addToTodosList }) => {
     setInputDescription(e.target.value);
   };
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
     addToTodosList({
       name: inputName,
-      description: "TODO",
+      description: inputDescription,
     });
+    setInputName("");
+    setInputDescription("");
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div className="todoForm">
       <TextField
         id="outlined-basic"
         label="Name"
         variant="outlined"
         onChange={handleInputNameChange}
         value={inputName}
+        sx={{
+          marginBottom: "1rem",
+        }}
       />
       <TextField
-        id="outlined-basic"
+        id="outlined-multiline-static"
+        multiline
+        rows={4}
         label="Description"
-        variant="outlined"
         onChange={handleInputDescriptionChange}
         value={inputDescription}
       />
