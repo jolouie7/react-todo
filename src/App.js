@@ -14,16 +14,11 @@ function App() {
       .then((data) => setTodos(data));
   }, [requestData]);
 
-  const addToTodosList = (todo) => {
-    setTodos([todo, ...todos]);
-    console.log(todos);
-  };
-
   return (
     <div>
       <div className="container">
         <h1>React Todo</h1>
-        <AddTodoForm addToTodosList={addToTodosList} />
+        <AddTodoForm setRequestData={setRequestData} />
         <DisplayTodosTable todos={todos} setRequestData={setRequestData} />
       </div>
     </div>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
+import { url as URL } from "../../variables";
 
-const AddTodoForm = ({ addToTodosList }) => {
+const AddTodoForm = ({ setRequestData }) => {
   const [inputName, setInputName] = useState("");
   const [inputDescription, setInputDescription] = useState("");
 
@@ -15,10 +16,26 @@ const AddTodoForm = ({ addToTodosList }) => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    addToTodosList({
+    // Validation checks
+    if (!inputName) {
+      console.error("There was error an with inputName");
+    }
+    if (!inputDescription) {
+      console.error("There was error an with inputDescription");
+    }
+    const todo = {
       name: inputName,
       description: inputDescription,
+    };
+    fetch(`${URL}/todos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
     });
+    setRequestData(new Date());
+    // Reset
     setInputName("");
     setInputDescription("");
   };

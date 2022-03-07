@@ -34,7 +34,7 @@ const DisplayTodosTable = ({ todos, setRequestData }) => {
   return (
     <div>
       <h1>TODO LIST:</h1>
-      {!todosList ? <div>Loading...</div> : displayTodos()}
+      {!todosList && todosList !== 0 ? <div>Loading...</div> : displayTodos()}
     </div>
   );
 };
