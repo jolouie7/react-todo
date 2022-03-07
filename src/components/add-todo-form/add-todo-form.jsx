@@ -35,7 +35,7 @@ const AddTodoForm = ({ setRequestData }) => {
       body: JSON.stringify(todo),
     });
     setRequestData(new Date());
-    // Reset
+    // Reset input fields
     setInputName("");
     setInputDescription("");
   };

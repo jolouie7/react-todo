@@ -3,12 +3,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { url as URL } from "../../variables";
 
-const DisplayTodosTable = ({ todos, setRequestData }) => {
+const DisplayTodosTable = ({ todos, setRequestData, deleteTodoList }) => {
   const todosList = todos.todos;
 
   const handleDeleteTodo = async (deleteTodoId) => {
     await fetch(`${URL}/todos/${deleteTodoId}`, { method: "DELETE" });
-    await setRequestData(new Date());
+    // * To keep it uniform: So todos.todos doesn't break
+    let filteredTodoList = todosList.filter((todo) => todo.id !== deleteTodoId);
+    filteredTodoList = { todos: filteredTodoList };
+    deleteTodoList(filteredTodoList);
   };
 
   const displayTodos = () => {

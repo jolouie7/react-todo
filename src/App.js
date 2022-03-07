@@ -14,12 +14,20 @@ function App() {
       .then((data) => setTodos(data));
   }, [requestData]);
 
+  const deleteTodoList = (newTodos) => {
+    setTodos(newTodos);
+  };
+
   return (
     <div>
       <div className="container">
         <h1>React Todo</h1>
         <AddTodoForm setRequestData={setRequestData} />
-        <DisplayTodosTable todos={todos} setRequestData={setRequestData} />
+        <DisplayTodosTable
+          todos={todos}
+          setRequestData={setRequestData}
+          deleteTodoList={deleteTodoList}
+        />
       </div>
     </div>
   );
