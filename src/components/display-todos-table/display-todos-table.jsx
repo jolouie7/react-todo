@@ -60,10 +60,7 @@ const DisplayTodosTable = ({ todos, setRequestData, deleteTodoList }) => {
       <div key={idx}>
         <div>
           <IconButton aria-label="edit" onClick={handleOpen}>
-            <EditIcon
-              sx={{ color: "rgb(144, 202, 249)" }}
-              onClick={handleOpen}
-            />
+            <EditIcon sx={{ color: "rgb(144, 202, 249)" }} />
           </IconButton>
           {displayEditModal()}
           <IconButton
