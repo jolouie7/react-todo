@@ -19,9 +19,11 @@ const AddTodoForm = ({ setRequestData }) => {
     // Validation checks
     if (!inputName) {
       console.error("There was error an with inputName");
+      return;
     }
     if (!inputDescription) {
       console.error("There was error an with inputDescription");
+      return;
     }
     const todo = {
       name: inputName,
