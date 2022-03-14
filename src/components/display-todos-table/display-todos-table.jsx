@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
 import { url as URL } from "../../variables";
+import AddTodoForm from "../add-todo-form/add-todo-form";
+import AddTodoInput from "../add-todo-input/add-todo-input";
 
 const style = {
   position: "absolute",
@@ -20,12 +20,37 @@ const style = {
   p: 4,
 };
 
-const DisplayTodosTable = ({ todos, setRequestData, deleteTodoList }) => {
+const DisplayTodosTable = ({
+  todos,
+  setRequestData,
+  deleteTodoList,
+  formButtonText,
+}) => {
   const todosList = todos.todos;
+  const [editInputName, setEditInputName] = useState("");
+  const [editInputDescription, setEditInputDescription] = useState("");
+  const [todoId, setTodoId] = useState(null);
   // Modal
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (todo) => handleOpenModal(todo);
   const handleClose = () => setOpen(false);
+
+  const handleOnSubmitEdit = (e) => {
+    e.preventDefault();
+    const todo = {
+      name: editInputName,
+      description: editInputDescription,
+    };
+    fetch(`${URL}/todos/${todoId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    })
+      .then(setRequestData(new Date()))
+      .then(() => handleClose());
+  };
 
   const handleDeleteTodo = async (deleteTodoId) => {
     await fetch(`${URL}/todos/${deleteTodoId}`, { method: "DELETE" });
@@ -33,6 +58,22 @@ const DisplayTodosTable = ({ todos, setRequestData, deleteTodoList }) => {
     let filteredTodoList = todosList.filter((todo) => todo.id !== deleteTodoId);
     filteredTodoList = { todos: filteredTodoList };
     deleteTodoList(filteredTodoList);
+  };
+
+  const handleOpenModal = (todo) => {
+    setOpen(true);
+    // Set Todo Info
+    setEditInputName(todo.name);
+    setEditInputDescription(todo.description);
+    setTodoId(todo.id);
+  };
+
+  const handleChangeEditInputName = (e) => {
+    setEditInputName(e.target.value);
+  };
+
+  const handleChangeEditInputDescription = (e) => {
+    setEditInputDescription(e.target.value);
   };
 
   const displayEditModal = () => {
@@ -44,12 +85,24 @@ const DisplayTodosTable = ({ todos, setRequestData, deleteTodoList }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Edit Todo
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <AddTodoForm
+            setRequestData={setRequestData}
+            handleOnSubmit={handleOnSubmitEdit}
+            formButtonText={formButtonText}
+          >
+            <AddTodoInput
+              handleOnChange={handleChangeEditInputName}
+              inputValue={editInputName}
+              inputLabel={"Name"}
+            />
+            <AddTodoInput
+              handleOnChange={handleChangeEditInputDescription}
+              inputValue={editInputDescription}
+              inputLabel={"Description"}
+              row={4}
+              multiline={true}
+            />
+          </AddTodoForm>
         </Box>
       </Modal>
     );
@@ -59,19 +112,19 @@ const DisplayTodosTable = ({ todos, setRequestData, deleteTodoList }) => {
     return todosList.map((todo, idx) => (
       <div key={idx}>
         <div>
-          <IconButton aria-label="edit" onClick={handleOpen}>
+          <IconButton aria-label="edit" onClick={() => handleOpen(todo)}>
             <EditIcon sx={{ color: "rgb(144, 202, 249)" }} />
           </IconButton>
-          {displayEditModal()}
+          {displayEditModal(todo)}
           <IconButton
             aria-label="delete"
             onClick={() => handleDeleteTodo(todo.id)}
           >
             <DeleteIcon sx={{ color: "red" }} />
           </IconButton>
-          {`${idx + 1}.`} Name:{todo.name}{" "}
+          {`${idx + 1}.`} {todo.name}{" "}
         </div>
-        <div>Description:{todo.description}</div>
+        <div>{todo.description}</div>
         <br />
       </div>
     ));

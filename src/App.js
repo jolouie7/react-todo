@@ -25,7 +25,7 @@ function App() {
     setInputDescription(e.target.value);
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmitCreate = (e) => {
     e.preventDefault();
     // Validation checks
     if (!inputName) {
@@ -51,7 +51,6 @@ function App() {
     // Reset input fields
     setInputName("");
     setInputDescription("");
-    console.log("onSubmit", todo);
   };
 
   const deleteTodoList = (newTodos) => {
@@ -64,7 +63,8 @@ function App() {
         <h1>React Todo</h1>
         <AddTodoForm
           setRequestData={setRequestData}
-          handleOnSubmit={handleOnSubmit}
+          handleOnSubmit={handleOnSubmitCreate}
+          formButtonText={"Add To List"}
         >
           <AddTodoInput
             handleOnChange={handleInputNameChange}
@@ -83,6 +83,11 @@ function App() {
           todos={todos}
           setRequestData={setRequestData}
           deleteTodoList={deleteTodoList}
+          formButtonText={"Edit Item"}
+          handleInputNameChange={handleInputNameChange}
+          inputName={inputName}
+          handleInputDescriptionChange={handleInputDescriptionChange}
+          inputDescription={inputDescription}
         />
       </div>
     </div>

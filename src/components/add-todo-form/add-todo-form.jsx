@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import { TextField, Button } from "@mui/material";
-import { FormControl } from "@mui/material";
-import { url as URL } from "../../variables";
+import React from "react";
+import { Button } from "@mui/material";
 
-const AddTodoForm = ({ setRequestData, handleOnSubmit, children }) => {
+const AddTodoForm = ({ handleOnSubmit, children, formButtonText }) => {
   return (
     <div>
       <form onSubmit={handleOnSubmit} className="todoForm">
         {children}
         <Button variant="text" type="submit">
-          Add to List
+          {formButtonText}
         </Button>
       </form>
     </div>
